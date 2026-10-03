@@ -4,17 +4,26 @@ let attempts = 0;
 const operators = ["+", "-", "*"];
 
 function playAgain() {
-    
+    score = 0;
+    attempts = 0;
+    document.getElementById("score").innerHTML = score;
+    document.getElementById("message").innerHTML = "";
+    document.getElementById("answer").value = "";
+    document.getElementById("div-success").style.display = "none";
+    document.getElementById("div-questions").style.display = "block";
+    generateQuestion();
 }
 
 function checkAnswer() {
     let value = document.getElementById("answer").value;
     let p = document.getElementById("message");
     let p2 = document.getElementById("score");
-
+    let success = document.getElementById("div-success");
+    let result = document.getElementsByTagName("h2")[0];
+    let question = document.getElementById("div-questions");
     attempts++;
 
-    if (attempts < 5) {
+    if (attempts <= 5) {
         if (value == correctAnswer){
             p.innerHTML = "Correct!";
             p.style.color = "green";
@@ -25,16 +34,24 @@ function checkAnswer() {
             p.style.color = "red";
         }
 
-        console.log(value);
-        console.log(correctAnswer);
         generateQuestion();
     }
 
     p2.innerHTML = score;
-
-    console.log(score);
-    console.log(attempts);
-    console.log(correctAnswer);
+    document.getElementById("answer").value = "";
+    
+    if (score == 5) {
+        result.innerHTML = "Congratulations!<br>You win!!";
+        success.style.color = "green";
+        question.style.display = "none";
+        success.style.display = "block";
+    }
+    else if (attempts == 5) {
+        result.innerHTML = "Game over!<br>You got " + score + " / 5.";
+        success.style.color = "red";
+        question.style.display = "none";
+        success.style.display = "block";
+    }
 }
 
 function generateQuestion () {
@@ -44,9 +61,9 @@ function generateQuestion () {
     let op = operators[z];
 
     switch (z) {
-        case 1: correctAnswer = x - y;
-        case 2: correctAnswer = x * y;
-        default: correctAnswer = x + y;
+        case 1: correctAnswer = x - y; break;
+        case 2: correctAnswer = x * y; break;
+        default: correctAnswer = x + y; break;
     }
 
     x.toString();
@@ -54,7 +71,8 @@ function generateQuestion () {
     y.toString();
 
     let question = x + " " + op + " " + y;
-    
-    console.log(x + " " + op + " " + y);
-    document.getElementById("question").innnerHTML = x + " " + op + " " + y;
+
+    document.getElementById("question").innerHTML = question;
 }
+
+generateQuestion();
